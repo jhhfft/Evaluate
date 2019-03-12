@@ -1,0 +1,25 @@
+.container {
+    width: 80%;
+    margin: 0px auto;
+}
+.container table td,
+.container table th {
+    text-align: center;
+}
+.hiddle {
+    display: none;
+}
+.layui-form.header {
+    position: fixed;
+    width: 80%;
+    top: 0;
+    z-index: 100;
+
+}
+.layui-form table {
+    margin-top: 0 !important;
+}
+.submit {
+    margin: 20px auto;
+    text-align: center;
+}
