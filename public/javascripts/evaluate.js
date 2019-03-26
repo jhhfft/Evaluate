@@ -304,6 +304,8 @@ $('.submit button').on('click', function(){
         }
         result.push({name,department, one, two, three, four, five})
     })
+
+    $.post("http://127.0.0.1:3000/evaluate", {result} );
     
 })
 
