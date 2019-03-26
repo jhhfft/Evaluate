@@ -268,8 +268,9 @@ layui.use(['rate'], function () {
     rate.render({ elem: '#rate110505', setText: function (value) { this.elem.prev().val(value) } })
 });
 
-const result = []
+const scoreArray = []
 $('.submit button').on('click', function(){
+    scoreArray.splice(0,scoreArray.length)
     let department = '',
         name = '',
         one = 0,
@@ -302,10 +303,11 @@ $('.submit button').on('click', function(){
             four = $(domEle).children()[4].firstElementChild.value
             five = $(domEle).children()[5].firstElementChild.value
         }
-        result.push({name,department, one, two, three, four, five})
+        scoreArray.push({name,department, one, two, three, four, five})
     })
 
-    $.post("http://127.0.0.1:3000/evaluate", {result} );
+    $.post("http://127.0.0.1:3000/evaluate/add", {scoreArray:JSON.stringify(scoreArray)} );
+    JSON.stringify(scoreArray)
     
 })
 
