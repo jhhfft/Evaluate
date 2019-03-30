@@ -51,7 +51,7 @@ const getResultFunc = async(req, res, next) =>{
     })
     // 将结果写入Excel表中
     const workbook = new Excel.Workbook();
-    const worksheet = workbook.addWorksheet('date')
+    const worksheet = workbook.addWorksheet(date)
     worksheet.addRow(["姓名", "部门", "服务一线，服务前端，态度和蔼，言行举止文明礼貌","听取一线意见，处理一线提出的问题，为基层排忧解难","落实首问负责制，兑现工作承诺，不推诿扯皮或拖拉","围绕公司重点部署推动工作，开展交流培训，调查研究，检查指导","合理安排全市资源，沟通分享先进经验及成功案例，总结推广","统计时间"])
     for (let row of finalResult){
         worksheet.addRow(row)
