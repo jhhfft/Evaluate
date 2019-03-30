@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ch-zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>职能部室支撑岗位员工测评</title>
+  <link rel="stylesheet" href="/layui/css/layui.css">
+  <style>
+    .header h1 {
+      text-align: center;
+      position: absolute;
+      top: 20%;
+      width: 100%;
+    }
+
+    .container {
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      width: 600px;
+      height: 50px;
+      text-align: center;
+      vertical-align: center;
+      margin-left: -300px;
+    }
+
+    #date {
+      display: inline-block;
+      width: 200px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <h1>职能部室支撑岗位员工测评结果</h1>
+  </div>
+  <div class="container">
+    <!-- 注意：这一层元素并不是必须的 -->
+    <span>日期：</span>
+    <input type="text" class="layui-input" id="date">
+    <button class="layui-btn layui-btn-normal">导出</button>
+  </div>
+  <script src="/javascripts/jquery.js"></script>
+  <script src="/layui/layui.js"></script>
+  <script>
+    layui.use('laydate', function () {
+      var laydate = layui.laydate;
+
+      //执行一个laydate实例
+      laydate.render({
+        elem: '#date', //指定元素
+        type: 'month'
+      });
+    });
+    $('.layui-btn.layui-btn-normal').on("click", function () {
+      let date = $("#date").val()
+      if (!date) {
+        layui.use('layer', function () {
+          var layer = layui.layer;
+          layer.alert('请选择日期', { icon: 5 });
+        });
+      } else {
+        $.get('http://127.0.0.1:3000/evaluate/getResult', { date }, function (res) {
+          if (res.state == 0) {
+            layui.use('layer', function () {
+              var layer = layui.layer;
+              layer.alert('暂无当前月份统计信息', { icon: 5 });
+            });
+          } else {
+            window.open(res.url)
+          }
+        })
+      }
+
+    })
+  </script>
+</body>
+
+</html>
