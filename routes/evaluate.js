@@ -9,6 +9,7 @@ const Sequelize = require('sequelize')
 
 const postScoreFunc = async(req, res, next) =>{
     const date = new Date()
+    // date.setHours(0)
     const scoreArray = JSON.parse(req.body.scoreArray)
     try {
         for (let employee of scoreArray) {
@@ -50,7 +51,7 @@ const getResultFunc = async(req, res, next) =>{
     const quota02 = []
     const quota03 = []
     const quota04 = []
-    const quota05 = []
+    const quota05 = []    
     queryResult.rows.forEach((item, index)=>{
         quota01[index] = []
         quota02[index] = []

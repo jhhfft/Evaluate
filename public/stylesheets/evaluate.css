@@ -34,3 +34,10 @@
     right: 0;
     display: none;
 }
+.words {
+    width: 100%;
+    border: none;
+    resize: none;
+    line-height: 1.2;
+    background-color: transparent;
+}

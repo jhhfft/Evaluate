@@ -277,11 +277,12 @@ $('.submit button').on('click', function () {
     two = 0,
     three = 0,
     four = 0,
-    five = 0
+    five = 0,
+    judge = ''
 
 
   $('.layui-table tbody tr').each(function (index, domEle) {
-    if ($(domEle).children().length === 7) {
+    if ($(domEle).children().length === 8) {
       department = $(domEle).children()[0].innerText
       name = $(domEle).children()[1].innerText
       one = $(domEle).children()[2].firstElementChild.value
@@ -292,6 +293,7 @@ $('.submit button').on('click', function () {
       three = $(domEle).children()[4].firstElementChild.value
       four = $(domEle).children()[5].firstElementChild.value
       five = $(domEle).children()[6].firstElementChild.value
+      judge = $(domEle).children()[7].firstElementChild.value
     } else {
       name = $(domEle).children()[0].innerText
       one = $(domEle).children()[1].firstElementChild.value
@@ -302,8 +304,9 @@ $('.submit button').on('click', function () {
       three = $(domEle).children()[3].firstElementChild.value
       four = $(domEle).children()[4].firstElementChild.value
       five = $(domEle).children()[5].firstElementChild.value
+      judge = $(domEle).children()[6].firstElementChild.value
     }
-    scoreArray.push({ name, department, one, two, three, four, five })
+    scoreArray.push({ name, department, one, two, three, four, five, judge })
   })
   if (scoreArray.length > 0) {
     $.ajax({
