@@ -268,9 +268,9 @@ layui.use(['rate'], function () {
   rate.render({ elem: '#rate110505', setText: function (value) { this.elem.prev().val(value) } })
 });
 
-const scoreArray = []
+
 $('.submit button').on('click', function () {
-  scoreArray.splice(0, scoreArray.length)
+  const scoreArray = []
   let department = '',
     name = '',
     one = 0,
@@ -280,35 +280,87 @@ $('.submit button').on('click', function () {
     five = 0,
     judge = ''
 
-
-  $('.layui-table tbody tr').each(function (index, domEle) {
+  let canSubmit = true
+  let unfullEle = null
+  let length = $('.layui-table tbody tr').length
+  let index = 0
+  let domEle = null
+  while (index < length) {
+    domEle = $('.layui-table tbody tr')[index]
     if ($(domEle).children().length === 8) {
       department = $(domEle).children()[0].innerText
       name = $(domEle).children()[1].innerText
       one = $(domEle).children()[2].firstElementChild.value
-      if (one == 0) {
-        return
-      }
       two = $(domEle).children()[3].firstElementChild.value
       three = $(domEle).children()[4].firstElementChild.value
       four = $(domEle).children()[5].firstElementChild.value
       five = $(domEle).children()[6].firstElementChild.value
       judge = $(domEle).children()[7].firstElementChild.value
+      // if (one+two+three+four+five > 0 && (one == 0 || two == 0 || three == 0 || four == 0 || five == 0)) {
+      //   canSubmit = false
+      //   unfullEle = domEle
+      //   break
+      // }
     } else {
       name = $(domEle).children()[0].innerText
       one = $(domEle).children()[1].firstElementChild.value
-      if (one == 0) {
-        return
-      }
       two = $(domEle).children()[2].firstElementChild.value
       three = $(domEle).children()[3].firstElementChild.value
       four = $(domEle).children()[4].firstElementChild.value
       five = $(domEle).children()[5].firstElementChild.value
       judge = $(domEle).children()[6].firstElementChild.value
+      // if (one+two+three+four+five > 0 && (one == 0 || two == 0 || three == 0 || four == 0 || five == 0)) {
+      //   canSubmit = false
+      //   unfullEle = domEle
+      //   break
+      // }
     }
-    scoreArray.push({ name, department, one, two, three, four, five, judge })
-  })
-  if (scoreArray.length > 0) {
+    let sum = parseInt(one + two + three + four + five)
+    if (sum == 0) {
+      index += 1
+      continue
+    }
+    if (one == 0 || two == 0 || three == 0 || four == 0 || five == 0) {
+      canSubmit = false
+      unfullEle = domEle
+      break
+    } else {
+      scoreArray.push({ name, department, one, two, three, four, five, judge })
+      index += 1
+    }
+  }
+  // $('.layui-table tbody tr').each(function (index, domEle) {
+  //   if ($(domEle).children().length === 8) {
+  //     department = $(domEle).children()[0].innerText
+  //     name = $(domEle).children()[1].innerText
+  //     one = $(domEle).children()[2].firstElementChild.value
+  //     two = $(domEle).children()[3].firstElementChild.value
+  //     three = $(domEle).children()[4].firstElementChild.value
+  //     four = $(domEle).children()[5].firstElementChild.value
+  //     five = $(domEle).children()[6].firstElementChild.value
+  //     judge = $(domEle).children()[7].firstElementChild.value
+  //     if (one == 0 || two == 0 || three == 0 || four == 0 || five == 0) {
+  //       canSubmit = false
+  //       unfullEle = domEle
+  //       return
+  //     }
+  //   } else {
+  //     name = $(domEle).children()[0].innerText
+  //     one = $(domEle).children()[1].firstElementChild.value
+  //     two = $(domEle).children()[2].firstElementChild.value
+  //     three = $(domEle).children()[3].firstElementChild.value
+  //     four = $(domEle).children()[4].firstElementChild.value
+  //     five = $(domEle).children()[5].firstElementChild.value
+  //     judge = $(domEle).children()[6].firstElementChild.value
+  //     if (one == 0 || two == 0 || three == 0 || four == 0 || five == 0) {
+  //       canSubmit = false
+  //       unfullEle = domEle
+  //       return
+  //     }
+  //   }
+  //   scoreArray.push({ name, department, one, two, three, four, five, judge })
+  // })
+  if (scoreArray.length > 0 && canSubmit) {
     $.ajax({
       type: "POST",
       url: "http://127.0.0.1:3000/evaluate/add",
@@ -334,7 +386,17 @@ $('.submit button').on('click', function () {
         });
       }
     });
-  } else {
+  } else if (!canSubmit) {
+    $("html, body").animate({
+      scrollTop: $(unfullEle).offset().top - $('.container thead').outerHeight(),
+      duration: 500,
+      easing: "swing"
+    });
+    layui.use('layer', function () {
+      var layer = layui.layer;
+      layer.alert('请完善评分或清除评分', { icon: 5 });
+    });
+  } else if (scoreArray.length == 0) {
     layui.use('layer', function () {
       var layer = layui.layer;
       layer.alert('请评分', { icon: 5 });
@@ -342,3 +404,15 @@ $('.submit button').on('click', function () {
   }
 })
 
+$('.cancle').on('click', function () {
+  $(this).prev().prev().val(0)
+  const ele = $(this).prev().children().eq(0)
+  const stars = ele.children()
+  let i = 0
+  while (i < 5) {
+    stars.eq(i).children().eq(0).removeClass('layui-icon-rate-solid')
+    stars.eq(i).children().eq(0).addClass('layui-icon-rate')
+    i = i + 1
+  }
+
+})
