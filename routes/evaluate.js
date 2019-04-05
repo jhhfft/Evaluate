@@ -47,17 +47,20 @@ const getResultFunc = async(req, res, next) =>{
     const title03 = ['name', 'department', 'three']
     const title04 = ['name', 'department', 'four']
     const title05 = ['name', 'department', 'five']
+    const title06 = ['name', 'department', 'judge']
     const quota01 = []
     const quota02 = []
     const quota03 = []
     const quota04 = []
     const quota05 = []    
+    const quota06 = []
     queryResult.rows.forEach((item, index)=>{
         quota01[index] = []
         quota02[index] = []
         quota03[index] = []
         quota04[index] = []
         quota05[index] = []
+        quota06[index] = []
         title01.forEach(t=>{
             quota01[index].push(item.get(t))
         })
@@ -73,6 +76,9 @@ const getResultFunc = async(req, res, next) =>{
         title05.forEach(t=>{
             quota05[index].push(item.get(t))
         })
+        title06.forEach(t=>{
+            quota06[index].push(item.get(t))
+        })
     })
     // 将结果写入Excel表中
     const workbook = new Excel.Workbook();
@@ -81,12 +87,13 @@ const getResultFunc = async(req, res, next) =>{
     const worksheet03 = workbook.addWorksheet("指标三")
     const worksheet04 = workbook.addWorksheet("指标四")
     const worksheet05 = workbook.addWorksheet("指标五")
+    const worksheet06 = workbook.addWorksheet("评价")
     worksheet01.addRow(["姓名", "部门", "服务一线，服务前端，态度和蔼，言行举止文明礼貌"])
     worksheet02.addRow(["姓名", "部门", "听取一线意见，处理一线提出的问题，为基层排忧解难"])
     worksheet03.addRow(["姓名", "部门", "落实首问负责制，兑现工作承诺，不推诿扯皮或拖拉"])
     worksheet04.addRow(["姓名", "部门", "围绕公司重点部署推动工作，开展交流培训，调查研究，检查指导"])
     worksheet05.addRow(["姓名", "部门", "合理安排全市资源，沟通分享先进经验及成功案例，总结推广"])
-    
+    worksheet06.addRow(["姓名", "部门", "评价"])
     for (let row of quota01){
         worksheet01.addRow(row)
     }
@@ -101,6 +108,9 @@ const getResultFunc = async(req, res, next) =>{
     }
     for (let row of quota05){
         worksheet05.addRow(row)
+    }
+    for (let row of quota06){
+        worksheet06.addRow(row)
     }
     const filePath = './public/score-file/'+date+'.xlsx' 
     workbook.xlsx.writeFile(filePath).then(function(){

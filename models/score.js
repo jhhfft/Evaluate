@@ -43,6 +43,9 @@ const Score = sequelize.define('score', {
         type: Sequelize.INTEGER,
         defaultValue: 1
     },
+    judge:{
+        type: Sequelize.STRING
+    },
     date: {
         type: Sequelize.DATE,
     }
